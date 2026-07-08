@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Bunga Tabungan | Creator Tegar Wiguna</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#059669',
+                        secondary: '#10b981',
+                        netral: '#334155',
+                        aman: '#16a34a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-gradient-bunga {
+                background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 40px rgba(5, 150, 105, 0.25);
+            }
+            .input-style {
+                @apply w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all;
+            }
+            .btn-gradient {
+                background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+                transition: all 0.3s ease;
+            }
+            .btn-gradient:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(5, 150, 105, 0.35);
+            }
+            .logo-tw {
+                background: linear-gradient(135deg, #059669, #10b981);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .uang {
+                font-variant-numeric: tabular-nums;
+            }
+            .slogan {
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+
+    <!-- Meta Tag Berbagi -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Kalkulator Bunga Tabungan | Creator Tegar Wiguna">
+    <meta property="og:description" content="Hitung berapa keuntungan bunga tabunganmu di bank secara akurat dan mudah!">
+    <meta property="og:image" content="https://i.imgur.com/8Z7XQfL.png">
+    <meta name="twitter:card" content="summary_large_image">
+</head>
+<body class="min-h-screen bg-gradient-bunga flex flex-col items-center justify-center p-4 font-sans">
+    
+    <div class="w-full max-w-xl">
+        <!-- Header dengan Logo & Slogan -->
+        <div class="text-center mb-6 text-white">
+            <div class="flex items-center justify-center gap-3 mb-3">
+                <div class="bg-white p-2 rounded-full shadow-lg">
+                    <span class="text-2xl font-extrabold logo-tw">TW</span>
+                </div>
+            </div>
+            <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-2 flex items-center justify-center gap-2">
+                <i class="fa fa-bank"></i> Kalkulator Bunga Tabungan
+            </h1>
+            <p class="text-green-100 slogan text-sm font-medium mb-1">"THE POWER OF CALCULATOR"</p>
+            <p class="text-green-100">Ketahui berapa keuntungan uangmu disimpan di bank 🏦</p>
+        </div>
+
+        <!-- Konten Utama -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 card-shadow">
+            <!-- Form Input -->
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">💵 Modal Awal Tabungan (Rp)</label>
+                    <input type="number" id="modal" class="input-style text-lg uang" placeholder="Contoh: 1000000" min="10000" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">📈 Suku Bunga Bank per Tahun (%)</label>
+                    <input type="number" id="sukuBunga" class="input-style text-lg" placeholder="Contoh: 3.5" min="0.1" max="20" step="0.1" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">⏳ Lama Menabung</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="waktu" class="input-style text-lg flex-1" placeholder="Contoh: 2" min="1" required>
+                        <select id="satuanWaktu" class="input-style flex-1">
+                            <option value="tahun">Tahun</option>
+                            <option value="bulan">Bulan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button id="hitungBtn" class="btn-gradient w-full py-3 px-6 text-white font-semibold rounded-xl text-lg">
+                <i class="fa fa-calculator mr-2"></i> Hitung Keuntungan
+            </button>
+
+            <!-- Hasil Perhitungan -->
+            <div id="hasil" class="hidden mt-8">
+                <div class="border-t border-green-100 pt-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">📊 Hasil Perhitungan</h3>
+                    
+                    <div class="space-y-3 text-gray-700">
+                        <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                            <span>Modal Awal:</span>
+                            <span id="hasilModal" class="font-bold uang text-netral">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between p-3 bg-green-50 rounded-lg">
+                            <span>Total Bunga Didapat:</span>
+                            <span id="hasilBunga" class="font-bold uang text-aman">+ Rp 0</span>
+                        </div>
+                        <div class="flex justify-between p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border-2 border-green-200">
+                            <span class="font-semibold">💳 Total Uang Akhir:</span>
+                            <span id="hasilTotal" class="font-bold uang text-xl text-primary">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div id="pesanSaran" class="mt-6 p-4 rounded-xl bg-blue-50 text-blue-800 text-center text-sm">
+                        Catatan: Menggunakan perhitungan bunga sederhana. Belum termasuk biaya admin pajak bunga.
+                    </div>
+                </div>
+
+                <!-- Tombol Bagikan WhatsApp -->
+                <div class="flex gap-2 justify-center mt-8 mb-4">
+                    <a href="https://api.whatsapp.com/send?text=Cek%20keuntungan%20tabunganmu%20di:%20https://tegarwiguna18-gif.github.io/Kalkulator-Bunga-Tabungan/" target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-xl shadow-md transition-all">
+                        <i class="fa fa-whatsapp mr-2"></i>Bagikan ke Teman
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer dengan Nama Creator & Slogan -->
+        <div class="text-center mt-6 text-white/90 text-sm space-y-1">
+            <p class="font-medium">"THE POWER OF CALCULATOR"</p>
+            <p>Dibuat oleh: Creator Tegar Wiguna</p>
+            <p>© 2026 Kalkulator Bunga Tabungan | Semua Hak Dilindungi</p>
+            <p class="text-xs opacity-75 mt-1">*Hasil estimasi, sesuaikan dengan ketentuan bank masing-masing</p>
+        </div>
+    </div>
+
+    <script>
+        const hitungBtn = document.getElementById('hitungBtn');
+        const hasilDiv = document.getElementById('hasil');
+
+        // Elemen hasil
+        const hasilModalEl = document.getElementById('hasilModal');
+        const hasilBungaEl = document.getElementById('hasilBunga');
+        const hasilTotalEl = document.getElementById('hasilTotal');
+
+        function formatUang(angka) {
+            return 'Rp ' + angka.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        hitungBtn.addEventListener('click', hitungBunga);
+
+        function hitungBunga() {
+            const modal = parseFloat(document.getElementById('modal').value);
+            const sukuBunga = parseFloat(document.getElementById('sukuBunga').value);
+            const waktu = parseFloat(document.getElementById('waktu').value);
+            const satuan = document.getElementById('satuanWaktu').value;
+
+            if (!modal || !sukuBunga || !waktu) {
+                alert('Silakan isi semua data dengan benar!');
+                return;
+            }
+
+            // Konversi waktu ke tahun
+            let waktuTahun = satuan === 'bulan' ? waktu / 12 : waktu;
+
+            // Rumus bunga sederhana: Bunga = Modal × Bunga × Waktu
+            const totalBunga = modal * (sukuBunga / 100) * waktuTahun;
+            const totalUang = modal + totalBunga;
+
+            hasilDiv.classList.remove('hidden');
+            hasilModalEl.textContent = formatUang(modal);
+            hasilBungaEl.textContent = '+ ' + formatUang(totalBunga);
+            hasilTotalEl.textContent = formatUang(totalUang);
+
+            hasilDiv.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+        }
+    </script>
+</body>
+</html>
